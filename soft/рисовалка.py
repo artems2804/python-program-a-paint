@@ -1,8 +1,10 @@
 from tkinter import *
 from turtle import *
+from tkinter.messagebox import showerror,askyesno,showinfo
 root = Tk()
 root.geometry("200x250")
-root.title('Paint!')
+root.title('Paint+keyboard!')
+root.configure(bg='lightblue')
 window = Screen()
 i = 10
 def o():
@@ -15,8 +17,15 @@ def t():
     print("поворот на :",j,"градусов")
 # выход
 def exit():
-    window.bye()
-    root.destroy()
+    result = askyesno(title='Подтверждение операции', message='Вы уверены?')
+    if result: 
+        window.bye()
+        root.destroy()
+        showinfo(title='Успех!', message='Выход выполнен!') 
+    else: 
+        showinfo("Результат", "Операция отменена")
+
+    
 # очистка
 def clear():
     clearscreen()
@@ -59,7 +68,7 @@ def key_pressed(event):
 # color
 def color():
     if e.get() == "красный":
-        pencolor('green')
+        pencolor('red')
     elif e.get() == "синий":
         pencolor('blue')
     elif e.get() == "зелёный":
@@ -68,6 +77,8 @@ def color():
         pencolor('yellow')
     else:
         pencolor('black')
+        e.delete(0, END)
+        error()
 # size
 def size():
     if e1.get() == "10":
@@ -92,14 +103,18 @@ def size():
         pensize(100)
     else:
         pensize(0)
+        e1.delete(0, END)
+        error()
 def rub():
     undo()
+def error():
+    showerror(title='Ошибка!', message='Вы ввели не то!')
 root.bind("<Key>", key_pressed)  # Обработка всех нажатий клавиш
 Button(root,text="Очистка!",command=clear).place(x=40,y=222)
-Button(root,text="ластик",command=rub).place(x=120,y=222)
+Button(root,text="ластик!",command=rub,bg='pink').place(x=120,y=222)
 Button(root,text="Exit!",command=exit).pack(ipady=10,ipadx=100)
-Button(root,text="поднять",command=up).place(x=0,y=50)
-Button(root,text="опустить",command=down).place(x=140,y=50)
+Button(root,text="поднять",command=up,bg='green').place(x=0,y=50)
+Button(root,text="опустить",command=down,bg='red').place(x=140,y=50)
 Label(root,text='Цвет: ').place(x=80,y=70)
 Button(root,text="цвет!",command=color).place(x=160,y=98)
 e = Entry()
@@ -108,6 +123,7 @@ Label(root,text='размер шрифта: ').place(x=50,y=120)
 Button(root,text="size!",command=size).place(x=160,y=145)
 e1 = Entry()
 e1.place(x=35,y=150)
+Label(root,text='градусы поворота: ').place(x=50,y=170)
 e2 = Entry()
 e2.place(x=35,y=190)
 j = 0
